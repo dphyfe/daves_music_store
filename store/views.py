@@ -24,17 +24,20 @@ def product_list(request):
     # Filter by category
     category_slug = request.GET.get("category")
     if category_slug:
+        # Ensure we only filter by an existing category
         category = get_object_or_404(Category, slug=category_slug)
         instruments = instruments.filter(category=category)
 
     # Filter by condition
     condition = request.GET.get("condition")
     if condition:
+        # Narrow results down to the selected condition
         instruments = instruments.filter(condition=condition)
 
     # Search functionality
     search_query = request.GET.get("search")
     if search_query:
+        # Match against multiple fields for a broader search
         instruments = instruments.filter(Q(name__icontains=search_query) | Q(brand__icontains=search_query) | Q(description__icontains=search_query))
 
     context = {
@@ -73,6 +76,7 @@ def _parse_filters(request):
     condition = request.GET.get("condition")
     if condition in {"", "all"}:
         condition = None
+    # Deal flag is treated as a simple toggle via ?deals=1
     deals_active = request.GET.get("deals") == "1"
     return condition, deals_active
 
@@ -80,11 +84,14 @@ def _parse_filters(request):
 def _apply_filters(queryset, condition, deals_active):
     """Apply shared filtering logic for category pages"""
     if condition == "new":
+        # Only include brand-new stock
         queryset = queryset.filter(condition="new")
     elif condition == "used":
+        # Keep anything that is not flagged as new
         queryset = queryset.exclude(condition="new")
 
     if deals_active:
+        # Featured flag doubles as our "deal" indicator
         queryset = queryset.filter(featured=True)
 
     return queryset
