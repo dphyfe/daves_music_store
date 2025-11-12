@@ -1,0 +1,254 @@
+{% extends 'store/base.html' %}
+
+{% block title %}Home - Dave's World of Music{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="container">
+        <div class="hero-content">
+            <h1>Welcome to Dave's World of Music</h1>
+            <p>Discover premium new and used musical instruments</p>
+            <div class="hero-buttons">
+                <a href="{% url 'product_list' %}" class="btn btn-primary">Shop Now</a>
+                <a href="{% url 'product_list' %}?condition=used_excellent" class="btn btn-secondary">Browse Used</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container my-5 category-page">
+    <div class="category-layout">
+        <aside class="category-sidebar">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h5 class="card-title d-flex align-items-center gap-2">
+                        <i class="fas fa-compass text-primary"></i>
+                        <span>Start Shopping</span>
+                    </h5>
+                    <p class="text-muted small mb-3">Jump into our full catalog or filter by condition.</p>
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'product_list' %}" class="btn btn-primary">
+                            <i class="fas fa-store me-2"></i> All Instruments
+                        </a>
+                        <a href="{% url 'product_list' %}?condition=new" class="btn btn-outline-secondary">
+                            <i class="fas fa-star me-2"></i> New Arrivals
+                        </a>
+                        <a href="{% url 'product_list' %}?condition=used" class="btn btn-outline-secondary">
+                            <i class="fas fa-tags me-2"></i> Used Deals
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h6 class="text-uppercase text-muted small mb-3">Browse Departments</h6>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item border-0 px-0">
+                            <a href="{% url 'guitars' %}" class="text-decoration-none text-dark"><i class="fas fa-guitar me-2"></i>Guitars</a>
+                        </li>
+                        <li class="list-group-item border-0 px-0">
+                            <a href="{% url 'basses' %}" class="text-decoration-none text-dark"><i class="fas fa-guitar me-2"></i>Bass Guitars</a>
+                        </li>
+                        <li class="list-group-item border-0 px-0">
+                            <a href="{% url 'drums' %}" class="text-decoration-none text-dark"><i class="fas fa-drum me-2"></i>Drums &amp; Percussion</a>
+                        </li>
+                        <li class="list-group-item border-0 px-0">
+                            <a href="{% url 'horns' %}" class="text-decoration-none text-dark"><i class="fas fa-trumpet me-2"></i>Horns &amp; Winds</a>
+                        </li>
+                        <li class="list-group-item border-0 px-0">
+                            <a href="{% url 'keyboards' %}" class="text-decoration-none text-dark"><i class="fas fa-keyboard me-2"></i>Keyboards &amp; Pianos</a>
+                        </li>
+                        <li class="list-group-item border-0 px-0">
+                            <a href="{% url 'amps_effects' %}" class="text-decoration-none text-dark"><i class="fas fa-volume-up me-2"></i>Amps &amp; Effects</a>
+                        </li>
+                        <li class="list-group-item border-0 px-0">
+                            <a href="{% url 'lessons' %}" class="text-decoration-none text-dark"><i class="fas fa-graduation-cap me-2"></i>Lessons</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h6 class="text-uppercase text-muted small mb-2">Why Shop With Us</h6>
+                    <ul class="list-unstyled small text-muted mb-0">
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Certified pre-owned instruments</li>
+                        <li class="mb-2"><i class="fas fa-shipping-fast text-primary me-2"></i>Free shipping over $100</li>
+                        <li class="mb-2"><i class="fas fa-tools text-warning me-2"></i>In-house setup &amp; repairs</li>
+                        <li><i class="fas fa-calendar-check text-info me-2"></i>Flexible payment plans</li>
+                    </ul>
+                </div>
+            </div>
+        </aside>
+
+        <div class="category-main">
+            <section class="home-section home-categories">
+                <div class="home-section-header">
+                    <h2>Shop by Category</h2>
+                    <p>Explore our most popular departments and find your next instrument.</p>
+                </div>
+                <div class="home-categories-grid">
+                    <a href="{% url 'guitars' %}" class="text-decoration-none">
+                        <div class="card h-100 shadow-sm hover-card">
+                            <div class="card-body text-center p-4">
+                                <div class="mb-3">
+                                    <i class="fas fa-guitar fa-3x text-primary"></i>
+                                </div>
+                                <h4 class="card-title">Guitars</h4>
+                                <p class="card-text text-muted">Acoustic &amp; Electric</p>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="{% url 'basses' %}" class="text-decoration-none">
+                        <div class="card h-100 shadow-sm hover-card">
+                            <div class="card-body text-center p-4">
+                                <div class="mb-3">
+                                    <i class="fas fa-guitar fa-3x text-success"></i>
+                                </div>
+                                <h4 class="card-title">Bass Guitars</h4>
+                                <p class="card-text text-muted">4 &amp; 5 String</p>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="{% url 'drums' %}" class="text-decoration-none">
+                        <div class="card h-100 shadow-sm hover-card">
+                            <div class="card-body text-center p-4">
+                                <div class="mb-3">
+                                    <i class="fas fa-drum fa-3x text-danger"></i>
+                                </div>
+                                <h4 class="card-title">Drums</h4>
+                                <p class="card-text text-muted">Kits &amp; Percussion</p>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="{% url 'keyboards' %}" class="text-decoration-none">
+                        <div class="card h-100 shadow-sm hover-card">
+                            <div class="card-body text-center p-4">
+                                <div class="mb-3">
+                                    <i class="fas fa-keyboard fa-3x text-info"></i>
+                                </div>
+                                <h4 class="card-title">Keyboards</h4>
+                                <p class="card-text text-muted">Pianos &amp; Synths</p>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="{% url 'horns' %}" class="text-decoration-none">
+                        <div class="card h-100 shadow-sm hover-card">
+                            <div class="card-body text-center p-4">
+                                <div class="mb-3">
+                                    <i class="fas fa-trumpet fa-3x text-warning"></i>
+                                </div>
+                                <h4 class="card-title">Horns</h4>
+                                <p class="card-text text-muted">Wind Instruments</p>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="{% url 'amps_effects' %}" class="text-decoration-none">
+                        <div class="card h-100 shadow-sm hover-card">
+                            <div class="card-body text-center p-4">
+                                <div class="mb-3">
+                                    <i class="fas fa-volume-up fa-3x text-secondary"></i>
+                                </div>
+                                <h4 class="card-title">Amps &amp; Effects</h4>
+                                <p class="card-text text-muted">Sound Equipment</p>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="{% url 'lessons' %}" class="text-decoration-none">
+                        <div class="card h-100 shadow-sm hover-card bg-light">
+                            <div class="card-body text-center p-4">
+                                <div class="mb-3">
+                                    <i class="fas fa-graduation-cap fa-3x text-primary"></i>
+                                </div>
+                                <h4 class="card-title">Lessons</h4>
+                                <p class="card-text text-muted">Learn from Pros</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </section>
+
+            <section class="home-section home-featured">
+                <div class="home-section-header">
+                    <h2>Featured Instruments</h2>
+                    <p>Hand-picked gear our staff is loving this week.</p>
+                </div>
+                {% if featured_instruments %}
+                <div class="products-grid mb-4">
+                    {% for instrument in featured_instruments %}
+                    <div class="product-card">
+                        <a href="{% url 'product_detail' instrument.slug %}">
+                            <div class="product-image">
+                                {% if instrument.image %}
+                                <img src="{{ instrument.image.url }}" alt="{{ instrument.name }}">
+                                {% else %}
+                                <div class="no-image">
+                                    <i class="fas fa-guitar"></i>
+                                </div>
+                                {% endif %}
+                                {% if instrument.condition != 'new' %}
+                                <span class="badge badge-used">Used</span>
+                                {% else %}
+                                <span class="badge badge-new">New</span>
+                                {% endif %}
+                            </div>
+                            <div class="product-info">
+                                <p class="product-brand">{{ instrument.brand }}</p>
+                                <h3 class="product-name">{{ instrument.name }}</h3>
+                                <p class="product-category">{{ instrument.category.name }}</p>
+                                <p class="product-price">${{ instrument.price }}</p>
+                            </div>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="no-products">
+                    <h4>No featured instruments right now</h4>
+                    <p class="mb-0">Check back soon for fresh arrivals!</p>
+                </div>
+                {% endif %}
+                <div class="text-center">
+                    <a href="{% url 'product_list' %}" class="btn btn-primary">View All Instruments</a>
+                </div>
+            </section>
+
+            <section class="home-section home-perks">
+                <div class="home-section-header">
+                    <h2>Why Musicians Choose Dave&apos;s</h2>
+                    <p>Experience the service and selection that keeps players coming back.</p>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <i class="fas fa-star"></i>
+                        <h3>Quality Guaranteed</h3>
+                        <p>All instruments inspected and certified</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-truck"></i>
+                        <h3>Fast Shipping</h3>
+                        <p>Free shipping on orders over $100</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-exchange-alt"></i>
+                        <h3>30-Day Returns</h3>
+                        <p>Not satisfied? Return within 30 days</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-headset"></i>
+                        <h3>Expert Support</h3>
+                        <p>Our team is here to help you</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+{% endblock %}
