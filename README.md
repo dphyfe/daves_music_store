@@ -1,6 +1,6 @@
 # Dave's World of Music - Musical Instrument Store
 
-![Dave's World of Music Homepage](https://github.com/user-attachments/assets/d5e8c3e5-8b4e-4f3e-9c8e-8f3c3e8f3e8f)
+![Dave's World of Music Homepage](static/homepage.png)
 
 A beautiful, modern web UI for a musical instrument store selling new and used instruments.
 
