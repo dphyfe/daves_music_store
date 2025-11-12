@@ -18,6 +18,7 @@
 
 <div class="container my-5 category-page home-page">
     <div class="category-layout">
+
         <aside class="category-sidebar">
             <div class="card shadow-sm border-0">
                 <div class="card-body">
@@ -203,6 +204,16 @@
                                 <p class="product-brand">{{ instrument.brand }}</p>
                                 <h3 class="product-name">{{ instrument.name }}</h3>
                                 <p class="product-category">{{ instrument.category.name }}</p>
+                                <div class="product-rating mb-2">
+                                    {% for i in "12345" %}
+                                    {% if forloop.counter <= instrument.rating %} <i class="fas fa-star text-warning"></i>
+                                        {% elif forloop.counter|add:"-0.5" <= instrument.rating %} <i class="fas fa-star-half-alt text-warning"></i>
+                                            {% else %}
+                                            <i class="far fa-star text-warning"></i>
+                                            {% endif %}
+                                            {% endfor %}
+                                            <span class="text-muted small ms-1">({{ instrument.rating }})</span>
+                                </div>
                                 <p class="product-price">${{ instrument.price }}</p>
                             </div>
                         </a>

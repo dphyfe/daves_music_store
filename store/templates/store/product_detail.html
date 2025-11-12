@@ -137,6 +137,16 @@
                             <p class="product-brand">{{ related.brand }}</p>
                             <h3 class="product-name">{{ related.name }}</h3>
                             <p class="product-category">{{ related.category.name }}</p>
+                            <div class="product-rating mb-2">
+                                {% for i in "12345" %}
+                                {% if forloop.counter <= related.rating %} <i class="fas fa-star text-warning"></i>
+                                    {% elif forloop.counter|add:"-0.5" <= related.rating %} <i class="fas fa-star-half-alt text-warning"></i>
+                                        {% else %}
+                                        <i class="far fa-star text-warning"></i>
+                                        {% endif %}
+                                        {% endfor %}
+                                        <span class="text-muted small ms-1">({{ related.rating }})</span>
+                            </div>
                             <p class="product-price">${{ related.price }}</p>
                         </div>
                     </a>
