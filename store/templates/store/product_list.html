@@ -1,0 +1,116 @@
+{% extends 'store/base.html' %}
+
+{% block title %}All Instruments - Dave's World of Music{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <h1>Browse Our Collection</h1>
+        <p>Find your perfect instrument from our selection of new and used items</p>
+    </div>
+</section>
+
+<section class="products-section">
+    <div class="container">
+        <div class="products-layout">
+            <aside class="filters-sidebar">
+                <div class="filter-section">
+                    <h3>Categories</h3>
+                    <ul class="filter-list">
+                        <li>
+                            <a href="{% url 'product_list' %}" class="{% if not selected_category %}active{% endif %}">
+                                All Categories
+                            </a>
+                        </li>
+                        {% for category in categories %}
+                        <li>
+                            <a href="{% url 'product_list' %}?category={{ category.slug }}" class="{% if selected_category == category.slug %}active{% endif %}">
+                                {{ category.name }}
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <div class="filter-section">
+                    <h3>Condition</h3>
+                    <ul class="filter-list">
+                        <li>
+                            <a href="{% url 'product_list' %}{% if selected_category %}?category={{ selected_category }}{% endif %}" class="{% if not selected_condition %}active{% endif %}">
+                                All Conditions
+                            </a>
+                        </li>
+                        <li>
+                            <a href="?condition=new{% if selected_category %}&category={{ selected_category }}{% endif %}" class="{% if selected_condition == 'new' %}active{% endif %}">
+                                New
+                            </a>
+                        </li>
+                        <li>
+                            <a href="?condition=used_excellent{% if selected_category %}&category={{ selected_category }}{% endif %}" class="{% if selected_condition == 'used_excellent' %}active{% endif %}">
+                                Used - Excellent
+                            </a>
+                        </li>
+                        <li>
+                            <a href="?condition=used_good{% if selected_category %}&category={{ selected_category }}{% endif %}" class="{% if selected_condition == 'used_good' %}active{% endif %}">
+                                Used - Good
+                            </a>
+                        </li>
+                        <li>
+                            <a href="?condition=used_fair{% if selected_category %}&category={{ selected_category }}{% endif %}" class="{% if selected_condition == 'used_fair' %}active{% endif %}">
+                                Used - Fair
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </aside>
+
+            <div class="products-main">
+                <div class="products-header">
+                    <p class="products-count">{{ instruments.count }} instrument{{ instruments.count|pluralize }} found</p>
+                    {% if search_query %}
+                    <p class="search-info">Search results for: "{{ search_query }}"</p>
+                    {% endif %}
+                </div>
+
+                {% if instruments %}
+                <div class="products-grid">
+                    {% for instrument in instruments %}
+                    <div class="product-card">
+                        <a href="{% url 'product_detail' instrument.slug %}">
+                            <div class="product-image">
+                                {% if instrument.image %}
+                                <img src="{{ instrument.image.url }}" alt="{{ instrument.name }}">
+                                {% else %}
+                                <div class="no-image">
+                                    <i class="fas fa-guitar"></i>
+                                </div>
+                                {% endif %}
+                                {% if instrument.condition != 'new' %}
+                                <span class="badge badge-used">{{ instrument.get_condition_display }}</span>
+                                {% else %}
+                                <span class="badge badge-new">New</span>
+                                {% endif %}
+                            </div>
+                            <div class="product-info">
+                                <p class="product-brand">{{ instrument.brand }}</p>
+                                <h3 class="product-name">{{ instrument.name }}</h3>
+                                <p class="product-category">{{ instrument.category.name }}</p>
+                                <p class="product-price">${{ instrument.price }}</p>
+                            </div>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="no-products">
+                    <i class="fas fa-search"></i>
+                    <h3>No instruments found</h3>
+                    <p>Try adjusting your filters or search terms</p>
+                    <a href="{% url 'product_list' %}" class="btn btn-primary">Clear Filters</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
