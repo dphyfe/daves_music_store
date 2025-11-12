@@ -67,22 +67,22 @@
                     <h6 class="text-uppercase text-muted small mb-3">Browse Departments</h6>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item border-0 px-0">
-                            <a href="{% url 'guitars' %}" class="text-decoration-none text-dark"><i class="fas fa-guitar me-2"></i>Guitars</a>
+                            <a href="{% url 'guitars' %}" class="text-decoration-none {% if page_title == 'Guitars' %}fw-semibold text-primary{% else %}text-dark{% endif %}"><i class="fas fa-guitar me-2"></i>Guitars</a>
                         </li>
                         <li class="list-group-item border-0 px-0">
-                            <a href="{% url 'basses' %}" class="text-decoration-none text-dark"><i class="fas fa-guitar me-2"></i>Bass Guitars</a>
+                            <a href="{% url 'basses' %}" class="text-decoration-none {% if page_title == 'Bass Guitars' %}fw-semibold text-primary{% else %}text-dark{% endif %}"><i class="fas fa-guitar me-2"></i>Bass Guitars</a>
                         </li>
                         <li class="list-group-item border-0 px-0">
-                            <a href="{% url 'drums' %}" class="text-decoration-none text-dark"><i class="fas fa-drum me-2"></i>Drums &amp; Percussion</a>
+                            <a href="{% url 'drums' %}" class="text-decoration-none {% if page_title == 'Drums & Percussion' %}fw-semibold text-primary{% else %}text-dark{% endif %}"><i class="fas fa-drum me-2"></i>Drums & Percussion</a>
                         </li>
                         <li class="list-group-item border-0 px-0">
-                            <a href="{% url 'horns' %}" class="text-decoration-none text-dark"><i class="fas fa-trumpet me-2"></i>Horns &amp; Winds</a>
+                            <a href="{% url 'horns' %}" class="text-decoration-none {% if page_title == 'Horns & Wind Instruments' %}fw-semibold text-primary{% else %}text-dark{% endif %}"><i class="fas fa-trumpet me-2"></i>Horns & Winds</a>
                         </li>
                         <li class="list-group-item border-0 px-0">
-                            <a href="{% url 'keyboards' %}" class="text-decoration-none {% if page_title == 'Keyboards & Pianos' %}fw-semibold text-primary{% else %}text-dark{% endif %}"><i class="fas fa-keyboard me-2"></i>Keyboards &amp; Pianos</a>
+                            <a href="{% url 'keyboards' %}" class="text-decoration-none {% if page_title == 'Keyboards & Pianos' %}fw-semibold text-primary{% else %}text-dark{% endif %}"><i class="fas fa-keyboard me-2"></i>Keyboards & Pianos</a>
                         </li>
                         <li class="list-group-item border-0 px-0">
-                            <a href="{% url 'amps_effects' %}" class="text-decoration-none text-dark"><i class="fas fa-volume-up me-2"></i>Amps &amp; Effects</a>
+                            <a href="{% url 'amps_effects' %}" class="text-decoration-none {% if page_title == 'Amps & Effects' %}fw-semibold text-primary{% else %}text-dark{% endif %}"><i class="fas fa-volume-up me-2"></i>Amps & Effects</a>
                         </li>
                         <li class="list-group-item border-0 px-0">
                             <a href="{% url 'lessons' %}" class="text-decoration-none text-dark"><i class="fas fa-graduation-cap me-2"></i>Lessons</a>
@@ -103,7 +103,7 @@
                             <img src="{{ instrument.image.url }}" class="card-img-top" alt="{{ instrument.name }}" style="height: 230px; object-fit: cover;">
                             {% else %}
                             <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 230px;">
-                                <i class="fas fa-keyboard fa-4x text-secondary"></i>
+                                <i class="fas fa-guitar fa-4x text-secondary"></i>
                             </div>
                             {% endif %}
 
@@ -144,7 +144,7 @@
             </div>
             {% else %}
             <div class="alert alert-info text-center">
-                <h4>No keyboards available at the moment</h4>
+                <h4>No instruments available at the moment</h4>
                 <p>Check back soon for new arrivals!</p>
             </div>
             {% endif %}
@@ -160,6 +160,10 @@
     .hover-card:hover {
         transform: translateY(-5px);
         box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15) !important;
+    }
+
+    .list-group-item {
+        background: transparent;
     }
 </style>
 

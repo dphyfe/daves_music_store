@@ -1,0 +1,149 @@
+{% extends 'store/base.html' %}
+
+{% block title %}{{ page_title }} - Dave's World of Music{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row mb-5">
+        <div class="col-12 text-center">
+            <h1 class="display-3">{{ page_title }}</h1>
+            <p class="lead text-muted">{{ page_description }}</p>
+        </div>
+    </div>
+
+    <!-- Lesson Types -->
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-5">
+        <div class="col">
+            <div class="card h-100 shadow-sm hover-card">
+                <div class="card-body text-center p-4">
+                    <div class="mb-3">
+                        <i class="fas fa-guitar fa-4x text-primary"></i>
+                    </div>
+                    <h3 class="card-title">Guitar Lessons</h3>
+                    <p class="card-text">Learn acoustic or electric guitar from beginner to advanced levels. Master chords, scales, and your favorite songs.</p>
+                    <p class="fw-bold fs-5 text-primary">$40/hour</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card h-100 shadow-sm hover-card">
+                <div class="card-body text-center p-4">
+                    <div class="mb-3">
+                        <i class="fas fa-music fa-4x text-success"></i>
+                    </div>
+                    <h3 class="card-title">Bass Lessons</h3>
+                    <p class="card-text">Develop your rhythm, technique, and groove. Learn to lock in with any rhythm section.</p>
+                    <p class="fw-bold fs-5 text-primary">$40/hour</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card h-100 shadow-sm hover-card">
+                <div class="card-body text-center p-4">
+                    <div class="mb-3">
+                        <i class="fas fa-drum fa-4x text-danger"></i>
+                    </div>
+                    <h3 class="card-title">Drum Lessons</h3>
+                    <p class="card-text">Build coordination, timing, and power. Learn essential rudiments and play your favorite beats.</p>
+                    <p class="fw-bold fs-5 text-primary">$45/hour</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card h-100 shadow-sm hover-card">
+                <div class="card-body text-center p-4">
+                    <div class="mb-3">
+                        <i class="fas fa-keyboard fa-4x text-info"></i>
+                    </div>
+                    <h3 class="card-title">Piano/Keyboard</h3>
+                    <p class="card-text">Classical piano or modern keyboard techniques. Read music and play by ear.</p>
+                    <p class="fw-bold fs-5 text-primary">$45/hour</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card h-100 shadow-sm hover-card">
+                <div class="card-body text-center p-4">
+                    <div class="mb-3">
+                        <i class="fas fa-trumpet fa-4x text-warning"></i>
+                    </div>
+                    <h3 class="card-title">Wind Instruments</h3>
+                    <p class="card-text">Saxophone, trumpet, flute, clarinet. Learn proper embouchure and breathing techniques.</p>
+                    <p class="fw-bold fs-5 text-primary">$50/hour</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card h-100 shadow-sm hover-card">
+                <div class="card-body text-center p-4">
+                    <div class="mb-3">
+                        <i class="fas fa-microphone fa-4x text-secondary"></i>
+                    </div>
+                    <h3 class="card-title">Voice Lessons</h3>
+                    <p class="card-text">Develop vocal technique, range, and confidence. All styles from classical to contemporary.</p>
+                    <p class="fw-bold fs-5 text-primary">$50/hour</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lesson Information -->
+    <div class="row mt-5">
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body p-4">
+                    <h3 class="card-title mb-3"><i class="fas fa-info-circle text-primary"></i> Lesson Details</h3>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-check text-success"></i> Private one-on-one instruction</li>
+                        <li class="mb-2"><i class="fas fa-check text-success"></i> Flexible scheduling - weekdays and weekends</li>
+                        <li class="mb-2"><i class="fas fa-check text-success"></i> All ages and skill levels welcome</li>
+                        <li class="mb-2"><i class="fas fa-check text-success"></i> Customized lesson plans for your goals</li>
+                        <li class="mb-2"><i class="fas fa-check text-success"></i> Performance opportunities available</li>
+                        <li class="mb-2"><i class="fas fa-check text-success"></i> Trial lesson available at 50% off</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body p-4">
+                    <h3 class="card-title mb-3"><i class="fas fa-users text-primary"></i> Our Instructors</h3>
+                    <p>All of our instructors are professional musicians with years of teaching experience and performance credentials.</p>
+                    <p class="mb-3">They are passionate about music education and dedicated to helping you achieve your musical goals.</p>
+                    <h5 class="mt-4">Ready to Start?</h5>
+                    <p>Contact us today to schedule your first lesson!</p>
+                    <p class="mb-1"><i class="fas fa-phone text-primary"></i> <strong>(555) 123-4567</strong></p>
+                    <p><i class="fas fa-envelope text-primary"></i> <strong>lessons@davesworldofmusic.com</strong></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Special Offers -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="alert alert-success text-center p-4">
+                <h4><i class="fas fa-gift"></i> Special Offer!</h4>
+                <p class="mb-0">Sign up for a 4-lesson package and get <strong>10% off</strong>! Purchase 8 lessons and save <strong>15%</strong>!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .hover-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .hover-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2) !important;
+    }
+</style>
+{% endblock %}

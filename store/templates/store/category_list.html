@@ -1,0 +1,34 @@
+{% extends 'store/base.html' %}
+
+{% block title %}Categories - Dave's World of Music{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <h1>Browse by Category</h1>
+        <p>Explore our wide range of musical instrument categories</p>
+    </div>
+</section>
+
+<section class="categories-page">
+    <div class="container">
+        <div class="categories-grid-large">
+            {% for category in categories %}
+            <a href="{% url 'product_list' %}?category={{ category.slug }}" class="category-card-large">
+                <div class="category-icon-large">
+                    <i class="fas fa-music"></i>
+                </div>
+                <h2>{{ category.name }}</h2>
+                {% if category.description %}
+                <p>{{ category.description }}</p>
+                {% endif %}
+                <p class="category-count">{{ category.instruments.count }} instrument{{ category.instruments.count|pluralize }}</p>
+                <span class="category-link">View Products <i class="fas fa-arrow-right"></i></span>
+            </a>
+            {% empty %}
+            <p>No categories available at the moment.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}
