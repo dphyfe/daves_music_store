@@ -86,7 +86,7 @@ body {
 
 .nav-button {
     padding: 0.75rem 1.5rem;
-    border: 2px solid rgba(255, 255, 255, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.95);
     border-radius: 999px;
     display: inline-flex;
     align-items: center;
@@ -142,6 +142,48 @@ body {
     border-color: #990000;
     transform: translateY(-1px);
     box-shadow: 0 3px 10px rgba(255, 0, 0, 0.4);
+}
+
+/* Cart Button */
+.cart-button {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    background: #ff0000;
+    color: white;
+    border: 2px solid #cc0000;
+    border-radius: 50%;
+    text-decoration: none;
+    transition: all 0.3s;
+    font-size: 1.25rem;
+}
+
+.cart-button:hover {
+    background: #cc0000;
+    border-color: #990000;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(255, 0, 0, 0.4);
+    color: white;
+}
+
+.cart-count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #ffffff;
+    color: #ff0000;
+    font-size: 0.75rem;
+    font-weight: bold;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #ff0000;
 }
 
 /* Hero Section */
