@@ -72,13 +72,29 @@
 
             <div class="card shadow-sm border-0">
                 <div class="card-body">
-                    <h6 class="text-uppercase text-muted small mb-2">Why Shop With Us</h6>
-                    <ul class="list-unstyled small text-muted mb-0">
-                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Certified pre-owned instruments</li>
-                        <li class="mb-2"><i class="fas fa-shipping-fast text-primary me-2"></i>Free shipping over $100</li>
-                        <li class="mb-2"><i class="fas fa-tools text-warning me-2"></i>In-house setup &amp; repairs</li>
-                        <li><i class="fas fa-calendar-check text-info me-2"></i>Flexible payment plans</li>
-                    </ul>
+                    <h6 class="text-uppercase text-muted small mb-3 d-flex align-items-center gap-2">
+                        <i class="fas fa-guitar text-primary"></i>
+                        <span>Filter by Brand</span>
+                    </h6>
+                    <form method="get" id="brandFilterForm">
+                        <div class="brand-filter-list" style="max-height: 250px; overflow-y: auto;">
+                            {% for brand in brands %}
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" name="brand" value="{{ brand }}" id="brand_{{ forloop.counter }}" {% if brand in selected_brands %}checked{% endif %} onchange="this.form.submit()">
+                                <label class="form-check-label small" for="brand_{{ forloop.counter }}">
+                                    {{ brand }}
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% if selected_brands %}
+                        <div class="d-grid mt-3">
+                            <a href="{% url 'home' %}" class="btn btn-sm btn-outline-secondary">
+                                <i class="fas fa-times me-1"></i> Clear Filters
+                            </a>
+                        </div>
+                        {% endif %}
+                    </form>
                 </div>
             </div>
         </aside>

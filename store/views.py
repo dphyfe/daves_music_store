@@ -7,11 +7,27 @@ from .models import Instrument, Category
 
 def home(request):
     """Homepage view with featured instruments"""
-    featured_instruments = Instrument.objects.filter(featured=True, in_stock=True)[:6]
+    featured_instruments = Instrument.objects.filter(featured=True, in_stock=True)
     categories = Category.objects.all()
+
+    # Get distinct brands for the filter
+    brands = Instrument.objects.values_list("brand", flat=True).distinct().order_by("brand")
+
+    # Get selected brands from query params
+    selected_brands = request.GET.getlist("brand")
+
+    # Filter featured instruments by selected brands
+    if selected_brands:
+        featured_instruments = featured_instruments.filter(brand__in=selected_brands)
+
+    # Limit to 6 instruments
+    featured_instruments = featured_instruments[:6]
+
     context = {
         "featured_instruments": featured_instruments,
         "categories": categories,
+        "brands": brands,
+        "selected_brands": selected_brands,
     }
     return render(request, "store/home.html", context)
 
@@ -34,11 +50,19 @@ def product_list(request):
         # Narrow results down to the selected condition
         instruments = instruments.filter(condition=condition)
 
+    # Filter by brand
+    selected_brands = request.GET.getlist("brand")
+    if selected_brands:
+        instruments = instruments.filter(brand__in=selected_brands)
+
     # Search functionality
     search_query = request.GET.get("search")
     if search_query:
         # Match against multiple fields for a broader search
         instruments = instruments.filter(Q(name__icontains=search_query) | Q(brand__icontains=search_query) | Q(description__icontains=search_query))
+
+    # Get distinct brands for the filter
+    brands = Instrument.objects.values_list("brand", flat=True).distinct().order_by("brand")
 
     context = {
         "instruments": instruments,
@@ -46,6 +70,8 @@ def product_list(request):
         "selected_category": category_slug,
         "selected_condition": condition,
         "search_query": search_query,
+        "brands": brands,
+        "selected_brands": selected_brands,
     }
     return render(request, "store/product_list.html", context)
 
@@ -78,10 +104,12 @@ def _parse_filters(request):
         condition = None
     # Deal flag is treated as a simple toggle via ?deals=1
     deals_active = request.GET.get("deals") == "1"
-    return condition, deals_active
+    # Get selected brands
+    selected_brands = request.GET.getlist("brand")
+    return condition, deals_active, selected_brands
 
 
-def _apply_filters(queryset, condition, deals_active):
+def _apply_filters(queryset, condition, deals_active, selected_brands=None):
     """Apply shared filtering logic for category pages"""
     if condition == "new":
         # Only include brand-new stock
@@ -94,13 +122,21 @@ def _apply_filters(queryset, condition, deals_active):
         # Featured flag doubles as our "deal" indicator
         queryset = queryset.filter(featured=True)
 
+    if selected_brands:
+        # Filter by selected brands
+        queryset = queryset.filter(brand__in=selected_brands)
+
     return queryset
 
 
 def _category_context(request, queryset, page_title, page_description):
     """Build a consistent context payload for category templates"""
-    condition, deals_active = _parse_filters(request)
-    filtered = _apply_filters(queryset, condition, deals_active)
+    condition, deals_active, selected_brands = _parse_filters(request)
+    filtered = _apply_filters(queryset, condition, deals_active, selected_brands)
+
+    # Get distinct brands for the filter
+    brands = Instrument.objects.values_list("brand", flat=True).distinct().order_by("brand")
+
     return {
         "instruments": filtered,
         "page_title": page_title,
@@ -112,6 +148,8 @@ def _category_context(request, queryset, page_title, page_description):
         "condition_all_checked": condition in (None, "", "all"),
         "condition_new_checked": condition == "new",
         "condition_used_checked": condition == "used",
+        "brands": brands,
+        "selected_brands": selected_brands,
     }
 
 

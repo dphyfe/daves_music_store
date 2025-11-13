@@ -62,6 +62,34 @@
                         </li>
                     </ul>
                 </div>
+
+                <div class="filter-section">
+                    <h3>Brand</h3>
+                    <form method="get" id="brandFilterForm">
+                        {% if selected_category %}
+                        <input type="hidden" name="category" value="{{ selected_category }}">
+                        {% endif %}
+                        {% if selected_condition %}
+                        <input type="hidden" name="condition" value="{{ selected_condition }}">
+                        {% endif %}
+                        <div class="brand-filter-list" style="max-height: 250px; overflow-y: auto;">
+                            {% for brand in brands %}
+                            <div class="filter-checkbox">
+                                <input type="checkbox" name="brand" value="{{ brand }}" id="brand_{{ forloop.counter }}" {% if brand in selected_brands %}checked{% endif %} onchange="this.form.submit()">
+                                <label for="brand_{{ forloop.counter }}">{{ brand }}</label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% if selected_brands %}
+                        <div class="mt-2">
+                            <a href="{% url 'product_list' %}{% if selected_category %}?category={{ selected_category }}{% endif %}{% if selected_condition %}{% if selected_category %}&{% else %}?{% endif %}condition={{ selected_condition }}{% endif %}"
+                                class="btn btn-sm btn-outline-secondary w-100">
+                                Clear Brand Filters
+                            </a>
+                        </div>
+                        {% endif %}
+                    </form>
+                </div>
             </aside>
 
             <div class="products-main">

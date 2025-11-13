@@ -64,6 +64,40 @@
 
             <div class="card shadow-sm border-0">
                 <div class="card-body">
+                    <h6 class="text-uppercase text-muted small mb-3 d-flex align-items-center gap-2">
+                        <i class="fas fa-guitar text-primary"></i>
+                        <span>Filter by Brand</span>
+                    </h6>
+                    <form method="get" id="brandFilterForm">
+                        {% if selected_condition %}
+                        <input type="hidden" name="condition" value="{{ selected_condition }}">
+                        {% endif %}
+                        {% if deals_active %}
+                        <input type="hidden" name="deals" value="1">
+                        {% endif %}
+                        <div class="brand-filter-list" style="max-height: 250px; overflow-y: auto;">
+                            {% for brand in brands %}
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" name="brand" value="{{ brand }}" id="brand_{{ forloop.counter }}" {% if brand in selected_brands %}checked{% endif %} onchange="this.form.submit()">
+                                <label class="form-check-label small" for="brand_{{ forloop.counter }}">
+                                    {{ brand }}
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% if selected_brands %}
+                        <div class="d-grid mt-3">
+                            <a href="?{% if selected_condition %}condition={{ selected_condition }}{% endif %}{% if deals_active %}{% if selected_condition %}&{% endif %}deals=1{% endif %}" class="btn btn-sm btn-outline-secondary">
+                                <i class="fas fa-times me-1"></i> Clear Brand Filters
+                            </a>
+                        </div>
+                        {% endif %}
+                    </form>
+                </div>
+            </div>
+
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
                     <h6 class="text-uppercase text-muted small mb-3">Browse Departments</h6>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item border-0 px-0">
