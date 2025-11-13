@@ -188,8 +188,13 @@ body {
 
 /* Hero Section */
 .hero {
-    background: linear-gradient(135deg, #d0d0d0 0%, #e0e0e0 100%);
-    color: #1a1a1a;
+    background:
+        linear-gradient(rgba(48, 48, 48, 0.75), rgba(48, 48, 48, 0.75)),
+        url('https://www.stars-music.com/medias/prs/se-custom-24-quilt-2h-trem-eb-hd-4-203371.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: #ffffff;
     padding: 5rem 0;
     text-align: center;
 }
@@ -197,12 +202,16 @@ body {
 .hero-content h1 {
     font-size: 3rem;
     margin-bottom: 1rem;
+    color: #ffffff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
 }
 
 .hero-content p {
     font-size: 1.5rem;
     margin-bottom: 2rem;
-    opacity: 0.9;
+    color: #ffffff;
+    opacity: 0.95;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
 }
 
 .hero-buttons {
