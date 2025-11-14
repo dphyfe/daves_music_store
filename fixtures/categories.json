@@ -1,0 +1,56 @@
+[
+{
+  "model": "store.category",
+  "pk": 1,
+  "fields": {
+    "name": "Guitars",
+    "slug": "guitars",
+    "description": "Acoustic and electric guitars"
+  }
+},
+{
+  "model": "store.category",
+  "pk": 2,
+  "fields": {
+    "name": "Bass Guitars",
+    "slug": "bass-guitars",
+    "description": "Electric and acoustic bass guitars"
+  }
+},
+{
+  "model": "store.category",
+  "pk": 3,
+  "fields": {
+    "name": "Drums",
+    "slug": "drums",
+    "description": "Drum kits and percussion"
+  }
+},
+{
+  "model": "store.category",
+  "pk": 4,
+  "fields": {
+    "name": "Keyboards",
+    "slug": "keyboards",
+    "description": "Pianos, synthesizers, and keyboards"
+  }
+},
+{
+  "model": "store.category",
+  "pk": 5,
+  "fields": {
+    "name": "Wind Instruments",
+    "slug": "wind-instruments",
+    "description": "Saxophones, trumpets, flutes"
+  }
+},
+{
+  "model": "store.category",
+  "pk": 6,
+  "fields": {
+    "name": "String Instruments",
+    "slug": "string-instruments",
+    "description": "Violins, cellos, and violas"
+  }
+}
+]
