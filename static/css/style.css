@@ -1,4 +1,4 @@
-/* General Styles */
+/* General Styles - Updated v1.1 */
 * {
     margin: 0;
     padding: 0;
@@ -197,6 +197,13 @@ body {
     color: #ffffff;
     padding: 5rem 0;
     text-align: center;
+}
+
+.hero-content {
+    display: inline-block;
+    background: #141516;
+    padding: 2.5rem 3rem;
+    border-radius: 20px;
 }
 
 .hero-content h1 {
