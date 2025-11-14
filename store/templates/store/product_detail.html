@@ -66,9 +66,9 @@
 
                 <div class="product-actions">
                     {% if instrument.in_stock %}
-                    <button class="btn btn-primary btn-large">
+                    <a href="{% url 'add_to_cart' instrument.slug %}" class="btn btn-primary btn-large">
                         <i class="fas fa-shopping-cart"></i> Add to Cart
-                    </button>
+                    </a>
                     <button class="btn btn-secondary btn-large">
                         <i class="fas fa-heart"></i> Add to Wishlist
                     </button>

@@ -235,3 +235,78 @@ def lessons_page(request):
         "page_description": "Learn to play with our expert instructors",
     }
     return render(request, "store/lessons.html", context)
+
+
+def get_or_create_cart(request):
+    """Get or create a cart for the current session"""
+    from .models import Cart
+
+    if not request.session.session_key:
+        request.session.create()
+    session_key = request.session.session_key
+
+    cart, created = Cart.objects.get_or_create(session_key=session_key)
+    return cart
+
+
+def cart_view(request):
+    """Display the shopping cart"""
+    cart = get_or_create_cart(request)
+    cart_items = cart.items.all()
+
+    context = {
+        "cart": cart,
+        "cart_items": cart_items,
+    }
+    return render(request, "store/cart.html", context)
+
+
+def add_to_cart(request, slug):
+    """Add an instrument to the cart"""
+    from django.shortcuts import redirect
+    from .models import CartItem
+
+    instrument = get_object_or_404(Instrument, slug=slug)
+    cart = get_or_create_cart(request)
+
+    # Get or create cart item
+    cart_item, created = CartItem.objects.get_or_create(cart=cart, instrument=instrument)
+
+    if not created:
+        # Item already in cart, increase quantity
+        cart_item.quantity += 1
+        cart_item.save()
+
+    return redirect("cart_view")
+
+
+def update_cart_item(request, item_id):
+    """Update quantity of a cart item"""
+    from django.shortcuts import redirect
+    from .models import CartItem
+
+    cart_item = get_object_or_404(CartItem, id=item_id)
+    quantity = request.POST.get("quantity", 1)
+
+    try:
+        quantity = int(quantity)
+        if quantity > 0:
+            cart_item.quantity = quantity
+            cart_item.save()
+        else:
+            cart_item.delete()
+    except ValueError:
+        pass
+
+    return redirect("cart_view")
+
+
+def remove_from_cart(request, item_id):
+    """Remove an item from the cart"""
+    from django.shortcuts import redirect
+    from .models import CartItem
+
+    cart_item = get_object_or_404(CartItem, id=item_id)
+    cart_item.delete()
+
+    return redirect("cart_view")
