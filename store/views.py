@@ -1,26 +1,46 @@
+"""
+Views for the public-facing `store` app.
+
+This module provides the pages used by customers: the homepage with
+featured products, product lists with filters/search, product detail,
+category pages, and minimal cart operations that leverage a session-
+backed `Cart` model.
+
+Design notes:
+- Keep views lightweight. Heavy filtering and business logic is
+  delegated to helper functions (`_parse_filters`, `_apply_filters`).
+- The cart is session-backed (see `get_or_create_cart`) so views rely
+  on a session key rather than user authentication.
+"""
+
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
 from .models import Instrument, Category
 
-# Create your views here.
-
 
 def home(request):
-    """Homepage view with featured instruments"""
+    """Homepage view with featured instruments.
+
+    Shows instruments marked as `featured` and `in_stock`. Supports a
+    simple brand filter via query parameters `?brand=...` (multiple
+    values allowed). Results are capped to the first 6 items for the
+    homepage layout.
+    """
+
     featured_instruments = Instrument.objects.filter(featured=True, in_stock=True)
     categories = Category.objects.all()
 
-    # Get distinct brands for the filter
+    # Distinct list of brands to populate filter controls in the template
     brands = Instrument.objects.values_list("brand", flat=True).distinct().order_by("brand")
 
-    # Get selected brands from query params
+    # Selected brands come from query parameters like ?brand=Fender&brand=Gibson
     selected_brands = request.GET.getlist("brand")
 
-    # Filter featured instruments by selected brands
     if selected_brands:
+        # Narrow the featured set to selected brands
         featured_instruments = featured_instruments.filter(brand__in=selected_brands)
 
-    # Limit to 6 instruments
+    # Limit the number of featured instruments displayed on the homepage
     featured_instruments = featured_instruments[:6]
 
     context = {
@@ -33,35 +53,43 @@ def home(request):
 
 
 def product_list(request):
-    """List all instruments with filtering options"""
+    """List searchable and filterable products.
+
+    Supports the following query parameters:
+    - `category`: category slug to filter by
+    - `condition`: one of the condition choices (e.g. 'new', 'used')
+    - `brand`: repeatable parameter to filter by brand (e.g. ?brand=Fender)
+    - `search`: full-text-like search across `name`, `brand`, and `description`
+    """
+
     instruments = Instrument.objects.filter(in_stock=True)
     categories = Category.objects.all()
 
-    # Filter by category
+    # Optional category filtering with validation via get_object_or_404
     category_slug = request.GET.get("category")
     if category_slug:
-        # Ensure we only filter by an existing category
         category = get_object_or_404(Category, slug=category_slug)
         instruments = instruments.filter(category=category)
 
-    # Filter by condition
+    # Filter by `condition` if provided
     condition = request.GET.get("condition")
     if condition:
-        # Narrow results down to the selected condition
         instruments = instruments.filter(condition=condition)
 
-    # Filter by brand
+    # Brand filter (allows multiple brands)
     selected_brands = request.GET.getlist("brand")
     if selected_brands:
         instruments = instruments.filter(brand__in=selected_brands)
 
-    # Search functionality
+    # Simple search across several text fields
     search_query = request.GET.get("search")
     if search_query:
-        # Match against multiple fields for a broader search
-        instruments = instruments.filter(Q(name__icontains=search_query) | Q(brand__icontains=search_query) | Q(description__icontains=search_query))
+        instruments = instruments.filter(
+            Q(name__icontains=search_query)
+            | Q(brand__icontains=search_query)
+            | Q(description__icontains=search_query)
+        )
 
-    # Get distinct brands for the filter
     brands = Instrument.objects.values_list("brand", flat=True).distinct().order_by("brand")
 
     context = {
@@ -77,9 +105,18 @@ def product_list(request):
 
 
 def product_detail(request, slug):
-    """Detailed view of a single instrument"""
+    """Detailed view of a single instrument.
+
+    Also selects a small set of related instruments from the same
+    category for display under the product details.
+    """
+
     instrument = get_object_or_404(Instrument, slug=slug)
-    related_instruments = Instrument.objects.filter(category=instrument.category, in_stock=True).exclude(id=instrument.id)[:4]
+    related_instruments = (
+        Instrument.objects.filter(category=instrument.category, in_stock=True)
+        .exclude(id=instrument.id)
+        [:4]
+    )
 
     context = {
         "instrument": instrument,
@@ -89,52 +126,65 @@ def product_detail(request, slug):
 
 
 def category_list(request):
-    """View all categories"""
+    """Simple list of all categories for navigation pages."""
+
     categories = Category.objects.all()
-    context = {
-        "categories": categories,
-    }
+    context = {"categories": categories}
     return render(request, "store/category_list.html", context)
 
 
 def _parse_filters(request):
-    """Extract shared filter parameters from the request"""
+    """Centralize parsing of query parameters used by category pages.
+
+    Returns a tuple: (condition, deals_active, selected_brands)
+    - `condition`: normalized condition value or None
+    - `deals_active`: boolean indicating whether the `deals` toggle is set
+    - `selected_brands`: list of brand names selected by the user
+    """
+
     condition = request.GET.get("condition")
     if condition in {"", "all"}:
         condition = None
-    # Deal flag is treated as a simple toggle via ?deals=1
+
+    # `?deals=1` toggles deals (featured items)
     deals_active = request.GET.get("deals") == "1"
-    # Get selected brands
+
     selected_brands = request.GET.getlist("brand")
     return condition, deals_active, selected_brands
 
 
 def _apply_filters(queryset, condition, deals_active, selected_brands=None):
-    """Apply shared filtering logic for category pages"""
+    """Apply shared filtering rules to a queryset used by category pages.
+
+    This function is intentionally small and composable so it can be
+    reused across multiple category-specific views.
+    """
+
     if condition == "new":
-        # Only include brand-new stock
         queryset = queryset.filter(condition="new")
     elif condition == "used":
-        # Keep anything that is not flagged as new
         queryset = queryset.exclude(condition="new")
 
     if deals_active:
-        # Featured flag doubles as our "deal" indicator
+        # In this project `featured` is reused as a lightweight "deal" flag
         queryset = queryset.filter(featured=True)
 
     if selected_brands:
-        # Filter by selected brands
         queryset = queryset.filter(brand__in=selected_brands)
 
     return queryset
 
 
 def _category_context(request, queryset, page_title, page_description):
-    """Build a consistent context payload for category templates"""
+    """Compose a consistent template context for category-style pages.
+
+    Accepts a base `queryset` containing instruments and returns a
+    dictionary containing UI-related flags and the filtered instruments.
+    """
+
     condition, deals_active, selected_brands = _parse_filters(request)
     filtered = _apply_filters(queryset, condition, deals_active, selected_brands)
 
-    # Get distinct brands for the filter
     brands = Instrument.objects.values_list("brand", flat=True).distinct().order_by("brand")
 
     return {
@@ -154,7 +204,11 @@ def _category_context(request, queryset, page_title, page_description):
 
 
 def guitars_page(request):
-    """Guitars category page"""
+    """Guitars category page.
+
+    Uses `_category_context` to build a template-friendly payload.
+    """
+
     queryset = Instrument.objects.filter(category__slug="guitars", in_stock=True)
     context = _category_context(
         request,
@@ -166,7 +220,8 @@ def guitars_page(request):
 
 
 def basses_page(request):
-    """Bass Guitars category page"""
+    """Bass Guitars category page."""
+
     queryset = Instrument.objects.filter(category__slug="bass-guitars", in_stock=True)
     context = _category_context(
         request,
@@ -178,7 +233,8 @@ def basses_page(request):
 
 
 def drums_page(request):
-    """Drums category page"""
+    """Drums & percussion category page."""
+
     queryset = Instrument.objects.filter(category__slug="drums", in_stock=True)
     context = _category_context(
         request,
@@ -190,7 +246,8 @@ def drums_page(request):
 
 
 def horns_page(request):
-    """Wind Instruments (Horns) category page"""
+    """Horns and wind instruments category page."""
+
     queryset = Instrument.objects.filter(category__slug="wind-instruments", in_stock=True)
     context = _category_context(
         request,
@@ -202,7 +259,8 @@ def horns_page(request):
 
 
 def keyboards_page(request):
-    """Keyboards category page"""
+    """Keyboards and pianos category page."""
+
     queryset = Instrument.objects.filter(category__slug="keyboards", in_stock=True)
     context = _category_context(
         request,
@@ -214,9 +272,17 @@ def keyboards_page(request):
 
 
 def amps_effects_page(request):
-    """Amps & Effects category page"""
+    """Amps and effects page.
+
+    Builds a broader queryset that looks for explicit amp/effect categories
+    or instruments whose name contains related keywords.
+    """
+
     queryset = Instrument.objects.filter(
-        Q(category__slug="amps-effects") | Q(name__icontains="amp") | Q(name__icontains="effect") | Q(name__icontains="pedal"),
+        Q(category__slug="amps-effects")
+        | Q(name__icontains="amp")
+        | Q(name__icontains="effect")
+        | Q(name__icontains="pedal"),
         in_stock=True,
     )
     context = _category_context(
@@ -229,7 +295,8 @@ def amps_effects_page(request):
 
 
 def lessons_page(request):
-    """Lessons information page"""
+    """Static-ish page describing music lessons offered by the store."""
+
     context = {
         "page_title": "Music Lessons",
         "page_description": "Learn to play with our expert instructors",
@@ -238,7 +305,12 @@ def lessons_page(request):
 
 
 def get_or_create_cart(request):
-    """Get or create a cart for the current session"""
+    """Return the session-backed `Cart` for the current request.
+
+    If the session has no `session_key`, a new session is created. The
+    returned `Cart` is retrieved or created based on that key.
+    """
+
     from .models import Cart
 
     if not request.session.session_key:
@@ -250,26 +322,30 @@ def get_or_create_cart(request):
 
 
 def cart_view(request):
-    """Display the shopping cart"""
+    """Display the current shopping cart and its items."""
+
     cart = get_or_create_cart(request)
     cart_items = cart.items.all()
 
-    context = {
-        "cart": cart,
-        "cart_items": cart_items,
-    }
+    context = {"cart": cart, "cart_items": cart_items}
     return render(request, "store/cart.html", context)
 
 
 def add_to_cart(request, slug):
-    """Add an instrument to the cart"""
+    """Add an instrument to the user's cart.
+
+    If the item already exists in the cart, increment its quantity.
+    Redirects back to the cart view after the operation.
+    """
+
     from django.shortcuts import redirect
     from .models import CartItem
 
     instrument = get_object_or_404(Instrument, slug=slug)
     cart = get_or_create_cart(request)
 
-    # Get or create cart item
+    # Get or create cart item; `unique_together` on CartItem enforces
+    # one row per (cart, instrument) pair.
     cart_item, created = CartItem.objects.get_or_create(cart=cart, instrument=instrument)
 
     if not created:
@@ -281,7 +357,11 @@ def add_to_cart(request, slug):
 
 
 def update_cart_item(request, item_id):
-    """Update quantity of a cart item"""
+    """Update the quantity for a cart item from a POST form.
+
+    If the provided quantity is 0 (or invalid), the item is removed.
+    """
+
     from django.shortcuts import redirect
     from .models import CartItem
 
@@ -296,13 +376,15 @@ def update_cart_item(request, item_id):
         else:
             cart_item.delete()
     except ValueError:
+        # Invalid input -- ignore and redirect back to the cart
         pass
 
     return redirect("cart_view")
 
 
 def remove_from_cart(request, item_id):
-    """Remove an item from the cart"""
+    """Remove a `CartItem` by id and return to the cart view."""
+
     from django.shortcuts import redirect
     from .models import CartItem
 
