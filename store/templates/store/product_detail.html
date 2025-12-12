@@ -18,7 +18,7 @@
         <div class="product-detail-layout">
             <div class="product-images">
                 {% if instrument.image %}
-                <img src="{{ instrument.image.url }}" alt="{{ instrument.name }}" class="main-image">
+                <img src="{{ instrument.image_display_url }}" alt="{{ instrument.name }}" class="main-image">
                 {% else %}
                 <div class="no-image-large">
                     <i class="fas fa-guitar"></i>
@@ -121,7 +121,7 @@
                     <a href="{% url 'product_detail' related.slug %}">
                         <div class="product-image">
                             {% if related.image %}
-                            <img src="{{ related.image.url }}" alt="{{ related.name }}">
+                            <img src="{{ related.image_display_url }}" alt="{{ related.name }}">
                             {% else %}
                             <div class="no-image">
                                 <i class="fas fa-guitar"></i>

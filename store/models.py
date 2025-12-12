@@ -13,6 +13,7 @@ Notes:
 """
 
 from django.db import models
+from django.templatetags.static import static
 from django.urls import reverse
 
 
@@ -62,9 +63,7 @@ class Instrument(models.Model):
     brand = models.CharField(max_length=100)
     condition = models.CharField(max_length=20, choices=CONDITION_CHOICES, default="new")
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    rating = models.DecimalField(
-        max_digits=2, decimal_places=1, default=5.0, help_text="Customer rating out of five"
-    )
+    rating = models.DecimalField(max_digits=2, decimal_places=1, default=5.0, help_text="Customer rating out of five")
     description = models.TextField()
     specifications = models.TextField(blank=True, help_text="Technical specifications")
     # Optional product image stored under MEDIA_ROOT/instruments/
@@ -88,6 +87,21 @@ class Instrument(models.Model):
         """
 
         return reverse("product_detail", kwargs={"slug": self.slug})
+
+    @property
+    def image_display_url(self):
+        """Return a usable URL for instrument images whether served from static or media."""
+
+        if not self.image:
+            return ""
+
+        if staticfiles_storage.exists(self.image.name):
+            return static(self.image.name)
+
+        try:
+            return self.image.url
+        except ValueError:
+            return ""
 
 
 class Cart(models.Model):

@@ -107,7 +107,7 @@
                         <a href="{% url 'product_detail' instrument.slug %}">
                             <div class="product-image">
                                 {% if instrument.image %}
-                                <img src="{{ instrument.image.url }}" alt="{{ instrument.name }}">
+                                <img src="{{ instrument.image_display_url }}" alt="{{ instrument.name }}">
                                 {% else %}
                                 <div class="no-image">
                                     <i class="fas fa-guitar"></i>

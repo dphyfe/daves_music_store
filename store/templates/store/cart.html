@@ -17,7 +17,7 @@
                     <div class="cart-item d-flex align-items-center border-bottom py-3">
                         <div class="cart-item-image me-3">
                             {% if item.instrument.image %}
-                            <img src="{{ item.instrument.image.url }}" alt="{{ item.instrument.name }}" class="img-fluid rounded" style="width: 100px; height: 100px; object-fit: cover;">
+                            <img src="{{ item.instrument.image_display_url }}" alt="{{ item.instrument.name }}" class="img-fluid rounded" style="width: 100px; height: 100px; object-fit: cover;">
                             {% else %}
                             <div class="bg-light rounded d-flex align-items-center justify-content-center" style="width: 100px; height: 100px;">
                                 <i class="fas fa-guitar fa-2x text-muted"></i>
