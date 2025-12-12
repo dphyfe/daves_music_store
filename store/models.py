@@ -12,6 +12,7 @@ Notes:
   admin, not heavy business logic.
 """
 
+from django.contrib.staticfiles.storage import staticfiles_storage
 from django.db import models
 from django.templatetags.static import static
 from django.urls import reverse
