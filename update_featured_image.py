@@ -31,7 +31,7 @@ if featured_instrument:
         image_name = "korg-synthesizer.jpg"
         featured_instrument.image.save(image_name, File(BytesIO(response.content)), save=True)
         print(f"✓ Image updated successfully!")
-        print(f"  Image saved as: {featured_instrument.image.url}")
+        print(f"  Image served from: {featured_instrument.image_display_url}")
     else:
         print(f"✗ Failed to download image. Status code: {response.status_code}")
 else:

@@ -12,6 +12,6 @@ print(f"Featured instruments count: {len(instruments)}\n")
 for i in instruments:
     print(f"{i.brand} {i.name}")
     print(f"  Image field: {i.image}")
-    print(f"  Image URL: {i.image.url if i.image else 'No image'}")
+    print(f"  Image URL: {i.image_display_url or 'No image'}")
     print(f"  Has image: {bool(i.image)}")
     print()

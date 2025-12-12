@@ -1,4 +1,6 @@
+from django.contrib.staticfiles.storage import staticfiles_storage
 from django.db import models
+from django.templatetags.static import static
 from django.urls import reverse
 
 # Create your models here.
@@ -52,6 +54,21 @@ class Instrument(models.Model):
 
     def get_absolute_url(self):
         return reverse("product_detail", kwargs={"slug": self.slug})
+
+    @property
+    def image_display_url(self):
+        """Return a usable URL for instrument images whether served from static or media."""
+
+        if not self.image:
+            return ""
+
+        if staticfiles_storage.exists(self.image.name):
+            return static(self.image.name)
+
+        try:
+            return self.image.url
+        except ValueError:
+            return ""
 
 
 class Cart(models.Model):
