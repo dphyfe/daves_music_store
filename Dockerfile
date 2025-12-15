@@ -33,7 +33,7 @@ RUN python deploy_init.py
 RUN python manage.py collectstatic --noinput
 
 # Expose port
-EXPOSE 8000
+EXPOSE 80
 
 # Run the application
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "daves_music_store.wsgi:application"]
+CMD ["gunicorn", "--bind", "0.0.0.0:80", "--workers", "3", "daves_music_store.wsgi:application"]
