@@ -67,6 +67,7 @@ def ensure_instrument_images(stdout):
     from store.models import Instrument
 
     media_path = os.path.join(settings.MEDIA_ROOT, "instruments")
+    static_path = os.path.join(settings.BASE_DIR, "static", "instruments")
     os.makedirs(media_path, exist_ok=True)
 
     palette = [
@@ -88,11 +89,21 @@ def ensure_instrument_images(stdout):
 
     for instrument in Instrument.objects.all():
         file_exists = False
-        if instrument.image and instrument.image.name:
+        image_name = instrument.image.name if instrument.image and instrument.image.name else ""
+
+        if image_name:
             try:
-                file_exists = instrument.image.storage.exists(instrument.image.name)
+                file_exists = instrument.image.storage.exists(image_name)
             except Exception:
                 file_exists = False
+
+        if not file_exists and image_name:
+            static_candidate = os.path.join(static_path, os.path.basename(image_name))
+            if os.path.exists(static_candidate):
+                with open(static_candidate, "rb") as f:
+                    instrument.image.save(os.path.basename(image_name), ContentFile(f.read()), save=True)
+                write_success(f"✓ Copied static image for {instrument.name}")
+                continue
 
         if file_exists:
             continue
