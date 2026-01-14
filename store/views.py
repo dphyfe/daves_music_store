@@ -84,11 +84,7 @@ def product_list(request):
     # Simple search across several text fields
     search_query = request.GET.get("search")
     if search_query:
-        instruments = instruments.filter(
-            Q(name__icontains=search_query)
-            | Q(brand__icontains=search_query)
-            | Q(description__icontains=search_query)
-        )
+        instruments = instruments.filter(Q(name__icontains=search_query) | Q(brand__icontains=search_query) | Q(description__icontains=search_query))
 
     brands = Instrument.objects.values_list("brand", flat=True).distinct().order_by("brand")
 
@@ -112,11 +108,7 @@ def product_detail(request, slug):
     """
 
     instrument = get_object_or_404(Instrument, slug=slug)
-    related_instruments = (
-        Instrument.objects.filter(category=instrument.category, in_stock=True)
-        .exclude(id=instrument.id)
-        [:4]
-    )
+    related_instruments = Instrument.objects.filter(category=instrument.category, in_stock=True).exclude(id=instrument.id)[:4]
 
     context = {
         "instrument": instrument,
@@ -279,10 +271,7 @@ def amps_effects_page(request):
     """
 
     queryset = Instrument.objects.filter(
-        Q(category__slug="amps-effects")
-        | Q(name__icontains="amp")
-        | Q(name__icontains="effect")
-        | Q(name__icontains="pedal"),
+        Q(category__slug="amps-effects") | Q(name__icontains="amp") | Q(name__icontains="effect") | Q(name__icontains="pedal"),
         in_stock=True,
     )
     context = _category_context(
@@ -392,3 +381,42 @@ def remove_from_cart(request, item_id):
     cart_item.delete()
 
     return redirect("cart_view")
+
+
+def _category_to_dict(category):
+    return {
+        "id": category.id,
+        "name": category.name,
+        "slug": category.slug,
+        "description": category.description,
+    }
+
+
+def _instrument_to_dict(instrument):
+    return {
+        "id": instrument.id,
+        "name": instrument.name,
+        "slug": instrument.slug,
+        "category": _category_to_dict(instrument.category),
+        "brand": instrument.brand,
+        "condition": instrument.condition,
+        "price": float(instrument.price),
+        "rating": float(instrument.rating),
+        "description": instrument.description,
+        "specifications": instrument.specifications,
+        "image": instrument.image_display_url,
+        "in_stock": instrument.in_stock,
+        "featured": instrument.featured,
+        "created_at": instrument.created_at.isoformat(),
+        "updated_at": instrument.updated_at.isoformat(),
+    }
+
+
+def _cart_item_to_dict(cart_item):
+    return {
+        "id": cart_item.id,
+        "instrument": _instrument_to_dict(cart_item.instrument),
+        "quantity": cart_item.quantity,
+        "subtotal": float(cart_item.get_subtotal()),
+        "added_at": cart_item.added_at.isoformat(),
+    }
