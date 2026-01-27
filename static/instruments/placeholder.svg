@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1c222d"/>
+      <stop offset="100%" stop-color="#0f131b"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#g)"/>
+  <g fill="none" stroke="#ff4d4f" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" opacity="0.9">
+    <path d="M180 180 C260 140 360 140 440 180"/>
+    <path d="M440 180 L520 160 560 200 560 360 520 400 440 380"/>
+    <path d="M320 220 L320 420 M360 220 L360 420"/>
+    <circle cx="300" cy="300" r="16"/>
+    <circle cx="400" cy="300" r="16"/>
+  </g>
+  <g fill="#c8d0dc" font-family="'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" text-anchor="middle">
+    <text x="400" y="470" font-size="32" fill="#f5f7fa">Image coming soon</text>
+    <text x="400" y="510" font-size="18" fill="#9aa3b1">Dave's World of Music</text>
+  </g>
+</svg>

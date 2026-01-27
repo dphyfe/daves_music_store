@@ -94,15 +94,20 @@ class Instrument(models.Model):
         """Return a usable URL for instrument images whether served from static or media."""
 
         if not self.image:
-            return ""
+            return static("instruments/placeholder.svg")
 
-        if staticfiles_storage.exists(self.image.name):
-            return static(self.image.name)
+        image_name = self.image.name
 
+        # Prefer the uploaded/media file if it exists
         try:
-            return self.image.url
-        except ValueError:
-            return ""
+            if self.image.storage.exists(image_name):
+                return self.image.url
+        except Exception:
+            # If storage access fails, fall back to static lookup
+            pass
+
+        # Serve from static assets (dev finds files in STATICFILES_DIRS without collectstatic)
+        return static(image_name or "instruments/placeholder.svg")
 
 
 class Cart(models.Model):
